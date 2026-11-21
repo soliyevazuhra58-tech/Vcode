@@ -36,7 +36,7 @@ jobs:
 
       - name: Configure preinstalled Android SDK
         run: |
-          SDK_ROOT="\${ANDROID_HOME:-\${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
           if [ ! -d "$SDK_ROOT" ]; then
             echo "Android SDK directory not found: $SDK_ROOT"
             exit 1
@@ -56,7 +56,7 @@ jobs:
 
       - name: Configure release keystore
         env:
-          VCODE_KEYSTORE_BASE64: \${{ secrets.VCODE_KEYSTORE_BASE64 }}
+          VCODE_KEYSTORE_BASE64: ${{ secrets.VCODE_KEYSTORE_BASE64 }}
         run: |
           if [ -n "$VCODE_KEYSTORE_BASE64" ]; then
             mkdir -p keystore
@@ -74,9 +74,9 @@ jobs:
 
       - name: Build signed release APK
         env:
-          VCODE_STORE_PASSWORD: \${{ secrets.VCODE_STORE_PASSWORD }}
-          VCODE_KEY_ALIAS: \${{ secrets.VCODE_KEY_ALIAS }}
-          VCODE_KEY_PASSWORD: \${{ secrets.VCODE_KEY_PASSWORD }}
+          VCODE_STORE_PASSWORD: ${{ secrets.VCODE_STORE_PASSWORD || 'vcode2026release' }}
+          VCODE_KEY_ALIAS: ${{ secrets.VCODE_KEY_ALIAS || 'vcode_release' }}
+          VCODE_KEY_PASSWORD: ${{ secrets.VCODE_KEY_PASSWORD || 'vcode2026release' }}
         run: |
           ./gradlew assembleRelease --no-daemon --stacktrace \
             -Dorg.gradle.jvmargs="-Xmx2560m -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8"
@@ -88,7 +88,7 @@ jobs:
           BUILD_TOOLS_DIR="$ANDROID_HOME/build-tools/35.0.0"
           "$BUILD_TOOLS_DIR/apksigner" verify --verbose --print-certs "$APK_PATH"
           VERSION_NAME=$(grep -E 'versionName\s*=' app/build.gradle.kts | head -n 1 | sed -E 's/.*"([^"]+)".*/\1/')
-          cp "$APK_PATH" "app/build/outputs/apk/release/VCode-v\${VERSION_NAME}-release.apk"
+          cp "$APK_PATH" "app/build/outputs/apk/release/VCode-v${VERSION_NAME}-release.apk"
 
       - name: Upload Release APK artifacts
         uses: actions/upload-artifact@v4

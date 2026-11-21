@@ -3,8 +3,6 @@ package com.vcode.ide.data.diagnostics
 import com.vcode.ide.domain.model.LanguageMode
 import com.vcode.ide.domain.model.ProblemItem
 import com.vcode.ide.domain.model.ProblemSeverity
-import org.json.JSONArray
-import org.json.JSONObject
 
 object DiagnosticsAnalyzer {
     fun analyze(filePath: String, fileName: String, language: LanguageMode, content: String): List<ProblemItem> {
@@ -27,15 +25,135 @@ object DiagnosticsAnalyzer {
     }
 
     private fun validateJson(filePath: String, fileName: String, content: String, out: MutableList<ProblemItem>) {
-        val trimmed = content.trim()
-        if (trimmed.isEmpty()) return
+        if (content.trim().isEmpty()) return
         try {
-            if (trimmed.startsWith("[")) JSONArray(trimmed) else JSONObject(trimmed)
-        } catch (e: Exception) {
+            StrictJsonParser(content).parseRoot()
+        } catch (e: IllegalArgumentException) {
             val msg = e.message ?: "Invalid JSON syntax"
-            val lineGuess = Regex("line (\\d+)").find(msg)?.groupValues?.getOrNull(1)?.toIntOrNull() ?: content.lines().size.coerceAtLeast(1)
+            val lineGuess = Regex("line (\\d+)").find(msg)?.groupValues?.getOrNull(1)?.toIntOrNull() ?: 1
             out += ProblemItem(filePath, fileName, lineGuess, 1, msg, ProblemSeverity.ERROR, "JSON")
         }
+    }
+
+    private class StrictJsonParser(private val src: String) {
+        private var pos = 0
+        private var line = 1
+
+        fun parseRoot() {
+            skipWs()
+            if (pos >= src.length) fail("Empty JSON")
+            parseValue()
+            skipWs()
+            if (pos < src.length) fail("Unexpected trailing character '${src[pos]}'")
+        }
+
+        private fun parseValue() {
+            skipWs()
+            if (pos >= src.length) fail("Unexpected end of JSON")
+            when (src[pos]) {
+                '{' -> parseObject()
+                '[' -> parseArray()
+                '"' -> parseString()
+                't' -> expectLiteral("true")
+                'f' -> expectLiteral("false")
+                'n' -> expectLiteral("null")
+                '-', in '0'..'9' -> parseNumber()
+                else -> fail("Unexpected character '${src[pos]}'")
+            }
+        }
+
+        private fun parseObject() {
+            pos++ // {
+            skipWs()
+            if (peek() == '}') { pos++; return }
+            while (true) {
+                skipWs()
+                if (peek() != '"') fail("Expected string key")
+                parseString()
+                skipWs()
+                if (peek() != ':') fail("Expected ':' after key")
+                pos++
+                parseValue()
+                skipWs()
+                when (peek()) {
+                    ',' -> pos++
+                    '}' -> { pos++; return }
+                    else -> fail("Expected ',' or '}'")
+                }
+            }
+        }
+
+        private fun parseArray() {
+            pos++ // [
+            skipWs()
+            if (peek() == ']') { pos++; return }
+            while (true) {
+                parseValue()
+                skipWs()
+                when (peek()) {
+                    ',' -> pos++
+                    ']' -> { pos++; return }
+                    else -> fail("Expected ',' or ']'")
+                }
+            }
+        }
+
+        private fun parseString() {
+            pos++ // opening quote
+            while (pos < src.length) {
+                val c = src[pos++]
+                if (c == '"') return
+                if (c == '\\') {
+                    if (pos >= src.length) fail("Unterminated escape")
+                    val esc = src[pos++]
+                    if (esc !in "\"\\/bfnrtu") fail("Invalid escape '\\$esc'")
+                    if (esc == 'u') {
+                        repeat(4) {
+                            val h = src.getOrNull(pos++) ?: fail("Incomplete unicode escape")
+                            if (h !in '0'..'9' && h !in 'a'..'f' && h !in 'A'..'F') fail("Invalid unicode escape")
+                        }
+                    }
+                } else if (c.code < 0x20) {
+                    fail("Unescaped control character in string")
+                }
+            }
+            fail("Unterminated string")
+        }
+
+        private fun parseNumber() {
+            if (peek() == '-') pos++
+            if (peek() == '0') pos++ else {
+                if (peek() !in '1'..'9') fail("Invalid number")
+                while (peek() in '0'..'9') pos++
+            }
+            if (peek() == '.') {
+                pos++
+                if (peek() !in '0'..'9') fail("Invalid decimal fraction")
+                while (peek() in '0'..'9') pos++
+            }
+            if (peek() == 'e' || peek() == 'E') {
+                pos++
+                if (peek() == '+' || peek() == '-') pos++
+                if (peek() !in '0'..'9') fail("Invalid exponent")
+                while (peek() in '0'..'9') pos++
+            }
+        }
+
+        private fun expectLiteral(lit: String) {
+            if (!src.startsWith(lit, pos)) fail("Unexpected token")
+            pos += lit.length
+        }
+
+        private fun skipWs() {
+            while (pos < src.length) {
+                val c = src[pos]
+                if (c == '\n') line++
+                if (c == ' ' || c == '\t' || c == '\r' || c == '\n') pos++ else break
+            }
+        }
+
+        private fun peek(): Char = src.getOrNull(pos) ?: '\u0000'
+        private fun fail(msg: String): Nothing = throw IllegalArgumentException("$msg at line $line")
     }
 
     private fun validateDelimiters(filePath: String, fileName: String, source: String, content: String, out: MutableList<ProblemItem>) {

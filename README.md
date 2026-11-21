@@ -53,6 +53,7 @@
 
 ## Build Signed Release APK
 
+### Local Build
 ```bash
 ./gradlew assembleRelease
 ```
@@ -68,6 +69,14 @@ Signed release APK output path:
 ```text
 app/build/outputs/apk/release/app-release.apk
 ```
+
+### GitHub Actions CI/CD Build
+The repository includes [`.github/workflows/android-release.yml`](.github/workflows/android-release.yml) to automatically:
+- Run `./gradlew testReleaseUnitTest` on every push, pull request, or manual `workflow_dispatch`.
+- Compile and sign `app-release.apk` + `VCode-v1.0.0-release.apk` with JDK 17 & Android SDK 35.
+- Verify v1/v2/v3 signatures with `apksigner` and upload the installable APK as a downloadable **GitHub Actions Artifact** (and attach it to a **GitHub Release** on `v*` tags).
+
+> **Tip:** To use your own production Play Store / release keystore in GitHub Actions, set repository secrets `VCODE_KEYSTORE_BASE64`, `VCODE_STORE_PASSWORD`, `VCODE_KEY_ALIAS`, and `VCODE_KEY_PASSWORD`. Otherwise the workflow falls back cleanly to `keystore/vcode-release.jks`.
 
 ---
 

@@ -551,7 +551,14 @@ class VCodeViewModel(
 
     fun updateCustomViewport(widthPx: Int, heightPx: Int) {
         _uiState.update { state ->
-            state.copy(viewportConfig = state.viewportConfig.copy(deviceType = ViewportDeviceType.CUSTOM, widthPx = widthPx.coerceIn(220, 2400), heightPx = heightPx.coerceIn(220, 2400)))
+            state.copy(
+                viewportConfig = state.viewportConfig.copy(
+                    deviceType = ViewportDeviceType.CUSTOM,
+                    widthPx = widthPx.coerceIn(220, 2400),
+                    heightPx = heightPx.coerceIn(220, 2400),
+                    isLandscape = false
+                )
+            )
         }
     }
 

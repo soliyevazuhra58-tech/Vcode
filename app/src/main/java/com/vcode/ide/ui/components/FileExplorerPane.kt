@@ -24,8 +24,8 @@ import androidx.compose.material.icons.filled.DriveFolderUpload
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.automirrored.filled.NoteAdd
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.NoteAdd
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.UploadFile
 import androidx.compose.material3.AlertDialog
@@ -96,7 +96,7 @@ fun FileExplorerPane(
             Text("EXPLORER", color = colors.textSecondary, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.8.sp, modifier = Modifier.weight(1f))
             if (rootDir.isNotEmpty()) {
                 IconButton(onClick = { showCreateFileForDir = rootDir }, modifier = Modifier.size(26.dp)) {
-                    Icon(Icons.Default.NoteAdd, "New File", tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+                    Icon(Icons.AutoMirrored.Filled.NoteAdd, "New File", tint = colors.textSecondary, modifier = Modifier.size(16.dp))
                 }
                 IconButton(onClick = { showCreateFolderForDir = rootDir }, modifier = Modifier.size(26.dp)) {
                     Icon(Icons.Default.CreateNewFolder, "New Folder", tint = colors.textSecondary, modifier = Modifier.size(16.dp))

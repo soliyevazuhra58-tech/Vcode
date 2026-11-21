@@ -31,8 +31,8 @@ import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -215,7 +215,7 @@ private fun TerminalView(
                 IconButton(onClick = onSendCtrlC, modifier = Modifier.size(26.dp)) { Icon(Icons.Default.Stop, "Ctrl+C", tint = Color(0xFFF87171), modifier = Modifier.size(16.dp)) }
             }
             IconButton(onClick = { onExecuteCommand(commandInput); commandInput = ""; historyCursor = -1 }, modifier = Modifier.size(26.dp)) {
-                Icon(Icons.Default.Send, "Run", tint = Color(0xFF38BDF8), modifier = Modifier.size(15.dp))
+                Icon(Icons.AutoMirrored.Filled.Send, "Run", tint = Color(0xFF38BDF8), modifier = Modifier.size(15.dp))
             }
         }
     }

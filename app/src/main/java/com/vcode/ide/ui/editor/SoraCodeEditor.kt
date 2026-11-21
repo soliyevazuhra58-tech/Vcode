@@ -26,10 +26,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
+import androidx.compose.material.icons.automirrored.filled.Redo
+import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FormatAlignLeft
-import androidx.compose.material.icons.filled.Redo
-import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -97,7 +97,7 @@ fun SoraEditorContainer(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(24.dp)
             ) {
-                Text("VCode Studio", color = colors.textPrimary, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+                Text("Vcode Studio", color = colors.textPrimary, fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
                 Text("Open a file from Explorer or press Ctrl+P to launch Command Palette", color = colors.textMuted, fontSize = 13.sp)
             }
         }
@@ -227,13 +227,13 @@ fun SoraEditorContainer(
         ) {
             Text(activeTab.relativePath, color = colors.textMuted, fontSize = 11.sp, modifier = Modifier.weight(1f), maxLines = 1)
             IconButton(onClick = { editorRef?.undo() }, enabled = canUndo, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Undo, "Undo", tint = if (canUndo) colors.textPrimary else colors.textMuted.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.Undo, "Undo", tint = if (canUndo) colors.textPrimary else colors.textMuted.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
             }
             IconButton(onClick = { editorRef?.redo() }, enabled = canRedo, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.Redo, "Redo", tint = if (canRedo) colors.textPrimary else colors.textMuted.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.Redo, "Redo", tint = if (canRedo) colors.textPrimary else colors.textMuted.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
             }
             IconButton(onClick = onFormatDocument, modifier = Modifier.size(28.dp)) {
-                Icon(Icons.Default.FormatAlignLeft, "Format Document", tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.FormatAlignLeft, "Format Document", tint = colors.textSecondary, modifier = Modifier.size(16.dp))
             }
         }
 

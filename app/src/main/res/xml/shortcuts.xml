@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_project"
+        android:enabled="true"
+        android:icon="@drawable/ic_splash_logo"
+        android:shortcutShortLabel="@string/shortcut_new_project"
+        android:shortcutLongLabel="@string/shortcut_new_project_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.vcode.ide"
+            android:targetClass="com.vcode.ide.MainActivity">
+            <extra android:name="vcode_shortcut" android:value="new_project" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="open_terminal"
+        android:enabled="true"
+        android:icon="@drawable/ic_splash_logo"
+        android:shortcutShortLabel="@string/shortcut_terminal"
+        android:shortcutLongLabel="@string/shortcut_terminal_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.vcode.ide"
+            android:targetClass="com.vcode.ide.MainActivity">
+            <extra android:name="vcode_shortcut" android:value="terminal" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="open_preview"
+        android:enabled="true"
+        android:icon="@drawable/ic_splash_logo"
+        android:shortcutShortLabel="@string/shortcut_preview"
+        android:shortcutLongLabel="@string/shortcut_preview_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.vcode.ide"
+            android:targetClass="com.vcode.ide.MainActivity">
+            <extra android:name="vcode_shortcut" android:value="preview" />
+        </intent>
+    </shortcut>
+</shortcuts>

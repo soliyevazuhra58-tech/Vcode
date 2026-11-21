@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">VCode</string>
+    <string name="shortcut_new_project">New Project</string>
+    <string name="shortcut_new_project_long">Create New VCode Project</string>
+    <string name="shortcut_terminal">Terminal</string>
+    <string name="shortcut_terminal_long">Open Shell Terminal</string>
+    <string name="shortcut_preview">Live Preview</string>
+    <string name="shortcut_preview_long">Open Web Live Preview</string>
 </resources>

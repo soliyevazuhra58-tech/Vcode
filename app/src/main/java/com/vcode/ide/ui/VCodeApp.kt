@@ -4,6 +4,10 @@ import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -57,10 +61,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vcode.ide.BuildConfig
+import com.vcode.ide.R
 import com.vcode.ide.domain.model.BottomPanelTab
 import com.vcode.ide.domain.model.EditorTab
 import com.vcode.ide.domain.model.FileNode
@@ -82,10 +90,15 @@ import com.vcode.ide.ui.components.StatusBar
 import com.vcode.ide.ui.editor.SoraEditorContainer
 import com.vcode.ide.ui.theme.LocalVCodeColors
 import com.vcode.ide.ui.theme.VCodeTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun VCodeApp(viewModel: VCodeViewModel) {
+fun VCodeApp(
+    viewModel: VCodeViewModel,
+    shortcutAction: String? = null,
+    onShortcutHandled: () -> Unit = {}
+) {
     val state by viewModel.uiState.collectAsState()
     val settings by viewModel.settings.collectAsState()
     val terminalSessions by viewModel.terminalSessions.collectAsState()
@@ -93,6 +106,21 @@ fun VCodeApp(viewModel: VCodeViewModel) {
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    var showBrandedSplash by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        delay(650)
+        showBrandedSplash = false
+    }
+
+    LaunchedEffect(shortcutAction) {
+        when (shortcutAction) {
+            "new_project" -> viewModel.toggleNewProjectDialog(true)
+            "terminal" -> viewModel.selectBottomTab(BottomPanelTab.TERMINAL)
+            "preview" -> viewModel.toggleLivePreview(forceShow = true)
+        }
+        if (shortcutAction != null) onShortcutHandled()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.snackbarEvents.collect { msg -> snackbarHostState.showSnackbar(msg) }
@@ -328,6 +356,56 @@ fun VCodeApp(viewModel: VCodeViewModel) {
             if (state.showLanguagePickerDialog && state.activeTab != null) {
                 LanguagePickerDialog(state.activeTab!!.language, { mode -> viewModel.setTabLanguage(state.activeTab!!.filePath, mode) }) {
                     viewModel.toggleLanguagePickerDialog(false)
+                }
+            }
+
+            AnimatedVisibility(
+                visible = showBrandedSplash,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFF0D1117))
+                        .clickable { showBrandedSplash = false },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_splash_logo),
+                            contentDescription = "VCode Logo",
+                            modifier = Modifier.size(96.dp)
+                        )
+                        Text(
+                            text = "VCode",
+                            color = Color.White,
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "Native Android IDE",
+                            color = Color(0xFF94A3B8),
+                            fontSize = 13.sp
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .background(Color(0xFF161B22), RoundedCornerShape(12.dp))
+                                .border(0.5.dp, Color(0xFF30363D), RoundedCornerShape(12.dp))
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "v${BuildConfig.VERSION_NAME} • Build ${BuildConfig.VERSION_CODE}",
+                                color = Color(0xFF38BDF8),
+                                fontSize = 11.sp,
+                                fontFamily = FontFamily.Monospace
+                            )
+                        }
+                    }
                 }
             }
         }

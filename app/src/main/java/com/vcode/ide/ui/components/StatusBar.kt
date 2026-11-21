@@ -71,5 +71,6 @@ fun StatusBar(
             Text(activeTab.language.displayName, color = colors.statusBarFg, fontSize = 11.sp, modifier = Modifier.clickable(onClick = onClickLanguage))
         }
         Text(autoSaveStatus, color = colors.statusBarFg.copy(alpha = 0.9f), fontSize = 11.sp)
+        Text("v${com.vcode.ide.BuildConfig.VERSION_NAME}", color = colors.statusBarFg.copy(alpha = 0.78f), fontSize = 10.sp)
     }
 }

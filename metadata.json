@@ -1,0 +1,6 @@
+{
+  "name": "VCode Android IDE",
+  "description": "Native Kotlin & Jetpack Compose Android IDE inspired by Visual Studio Code with Sora Editor, real shell terminal, JGit source control, and live responsive WebView preview.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

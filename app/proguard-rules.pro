@@ -1,0 +1,12 @@
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+-keep class io.github.rosemoe.sora.** { *; }
+-dontwarn io.github.rosemoe.sora.**
+-keep class org.eclipse.tm4e.** { *; }
+-dontwarn org.eclipse.tm4e.**
+-keep class org.eclipse.jgit.** { *; }
+-dontwarn org.eclipse.jgit.**
+-keep class org.mozilla.javascript.** { *; }
+-dontwarn org.mozilla.javascript.**
+-dontwarn java.lang.management.**
+-dontwarn javax.naming.**
+-dontwarn org.ietf.jgss.**

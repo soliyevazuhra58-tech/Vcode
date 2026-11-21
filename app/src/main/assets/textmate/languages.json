@@ -1,0 +1,19 @@
+{
+  "languages": [
+    { "name": "html", "scopeName": "text.html.basic", "grammar": "textmate/grammars/html.json", "languageConfiguration": "textmate/configs/html.json", "embeddedLanguages": { "source.css": "css", "source.js": "javascript" } },
+    { "name": "css", "scopeName": "source.css", "grammar": "textmate/grammars/css.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "javascript", "scopeName": "source.js", "grammar": "textmate/grammars/javascript.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "typescript", "scopeName": "source.ts", "grammar": "textmate/grammars/typescript.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "python", "scopeName": "source.python", "grammar": "textmate/grammars/python.json", "languageConfiguration": "textmate/configs/python.json" },
+    { "name": "java", "scopeName": "source.java", "grammar": "textmate/grammars/java.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "kotlin", "scopeName": "source.kotlin", "grammar": "textmate/grammars/kotlin.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "c", "scopeName": "source.c", "grammar": "textmate/grammars/c.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "cpp", "scopeName": "source.cpp", "grammar": "textmate/grammars/cpp.json", "languageConfiguration": "textmate/configs/c-style.json" },
+    { "name": "json", "scopeName": "source.json", "grammar": "textmate/grammars/json.json", "languageConfiguration": "textmate/configs/json.json" },
+    { "name": "xml", "scopeName": "text.xml", "grammar": "textmate/grammars/xml.json", "languageConfiguration": "textmate/configs/html.json" },
+    { "name": "php", "scopeName": "source.php", "grammar": "textmate/grammars/php.json", "languageConfiguration": "textmate/configs/c-style.json", "embeddedLanguages": { "text.html.basic": "html", "source.js": "javascript", "source.css": "css" } },
+    { "name": "sql", "scopeName": "source.sql", "grammar": "textmate/grammars/sql.json", "languageConfiguration": "textmate/configs/sql.json" },
+    { "name": "markdown", "scopeName": "text.html.markdown", "grammar": "textmate/grammars/markdown.json", "languageConfiguration": "textmate/configs/markdown.json", "embeddedLanguages": { "source.js": "javascript", "source.kotlin": "kotlin", "source.python": "python", "text.html.basic": "html" } },
+    { "name": "shellscript", "scopeName": "source.shell", "grammar": "textmate/grammars/shellscript.json", "languageConfiguration": "textmate/configs/shell.json" }
+  ]
+}

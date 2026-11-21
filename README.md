@@ -1,11 +1,11 @@
-<div align="center">
+# VCode — Native Android IDE
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+VCode is a native Android application built with **Kotlin**, **Jetpack Compose**, **Material 3**, **MVVM**, **Room**, **DataStore**, **Android Storage Access Framework**, **Sora CodeEditor + TextMate**, **Eclipse JGit**, **Mozilla Rhino**, and **WebView**.
 
-  <h1>Built with AI Studio</h2>
+## Build Signed Release APK
+```bash
+./gradlew assembleRelease
+```
 
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+Signed Release APK output path:
+`app/build/outputs/apk/release/app-release.apk`
